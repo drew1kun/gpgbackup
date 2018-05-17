@@ -70,7 +70,7 @@ function genpdf {
     mv gpgbackup.pdf ./$1
 
     # Cleanup:
-    rm -fP gpgbackup.*
+    rm -fP gpgbackup.log gpgbackup.tex gpgbackup.aux
     exit 0
 }
 
