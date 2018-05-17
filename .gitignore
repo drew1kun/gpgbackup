@@ -1,0 +1,10 @@
+# Ignore EVERYTHING
+*
+
+# EXCEPT:
+!.gitignore
+!latex
+!latex/gpgbackup.tex.template
+!gpgbackup.sh
+!README.md
+!LICENSE
