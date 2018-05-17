@@ -60,10 +60,10 @@ function genpdf {
     mkdir -p ./$1
 
     # prepare gpgbackup.tex self generated latex document:
-    sed -e "s/PRIVATE_KEY/$1/g" \
+    cat git@github.com:drew-kun/gpgbackup.git | sed -e "s/PRIVATE_KEY/$1/g" \
     -e "s/HEAD/$2/g" \
     -e "s/DECODE/$3/g" \
-    -e "s/SPLIT/$4/g" ./latex/gpgbackup.tex.template > gpgbackup.tex
+    -e "s/SPLIT/$4/g" > gpgbackup.tex
 
     # generate pdf and move it right place:
     pdflatex --shell-escape gpgbackup.tex > /dev/null 2>&1
