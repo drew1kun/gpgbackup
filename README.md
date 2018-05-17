@@ -1,6 +1,7 @@
 # gpgbackup
 Back up your gpg private keys to printable QR codes, and restore them from scanned PNG images.
 
+[![BSD licensed][bsd-badge]][bsd-link]
 
 ## What does it do?
 
@@ -27,7 +28,7 @@ Depends on:
   - **coreutils** *(GNU version)*
   - **pdflatex** (mactex on MacOS or latex on Linux)
 
-MacOS: install dependencies with Homebrew:
+MacOS: install dependencies with [Homebrew][homebrew]:
 
       brew cask install gpg-suite mactex
 Install GPGTools GUI with gpg/gpg CLI as well as mactex(pdflatex)
@@ -69,3 +70,14 @@ Now you can import it using:
 
 Done!
 
+## License
+
+[BSD][bsd-link]
+
+## Author Information
+
+Andrew Shagayev | [e-mail](mailto:drewshg@gmail.com)
+
+[bsd-badge]: https://img.shields.io/badge/license-BSD-blue.svg
+[bsd-link]: https://raw.githubusercontent.com/drew-kun/gpgbackup/master/LICENSE
+[homebrew]: http://brew.sh/
