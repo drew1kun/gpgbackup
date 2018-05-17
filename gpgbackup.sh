@@ -52,7 +52,7 @@ function key2qr {
     mv $1.qr.tar.gz ./$1
 
     # Cleanup
-    rm -rfP $1.ascii *qr_*
+    rm -fP $1.ascii *qr_*
     exit 0
 }
 
@@ -70,7 +70,7 @@ function genpdf {
     mv gpgbackup.pdf ./$1
 
     # Cleanup:
-    rm -rfP gpgbackup.*
+    rm -fP gpgbackup.*
     exit 0
 }
 
@@ -81,7 +81,7 @@ function qr2key {
     #cat *.out.ascii | base64 $3 | paperkey --pubring ~/.gnupg/pubring.gpg | gpg2 --import
 
     # Cleanup
-    rm -rfP *.out.ascii
+    rm -fP *.out.ascii
     exit 0
 }
 
