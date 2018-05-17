@@ -7,29 +7,37 @@
 \def\gpgkey{PRIVATE_KEY}
 
 \newcommand\gpgtopng{
-  \immediate\write18{gpg --export-secret-key \gpgkey | paperkey --output-type raw | base64 > temp}
-  \immediate\write18{SPLIT temp -n 4 IMG}
-  \immediate\write18{for f in IMG*; do cat $f | qrencode -o /tmp/$f.png; done}
-  \immediate\write18{rm IMG* temp}
+  \immediate\write18{GPG --export-secret-key \gpgkey | paperkey --output-type raw | base64 > \gpgkey.ascii}
+  \immediate\write18{SPLIT -n 4 -d \gpgkey.ascii qr_}
+  \immediate\write18{for f in qr_*; do cat $f | qrencode -o /tmp/${f}.png; done}
+  \immediate\write18{rm -fP qr_* \gpgkey.ascii}
 }
 
 \gpgtopng
 
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{Generated with \LaTeX}
+\fancyhead[RE,LO]{PRIVATE_KEY.asc}
+\fancyfoot[CE,CO]{\leftmark}
+\fancyfoot[LE,RO]{\thepage}
+
 \begin{document}
 
-\foreach \l in {a, ..., d} {
+\foreach \l in {0, ..., 3} {
   \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\textwidth]{/tmp/IMGa\l.png}
+    \includegraphics[width=0.6\textwidth]{/tmp/qr_0\l.png}
     \caption{QR \l}
   \end{figure}
 }
 
-To recover run the following command
-
+\centering{To recover the key run the following command:}
 \begin{verbatim}
-for f in *.png; do zbarimg --raw $f | HEAD -c -1 > $f.out ; done
-cat *.out | base64 DECODE | paperkey --pubring ~/.gnupg/pubring.gpg > PRIVATE_KEY
+for f in *.png; do zbarimg --raw ${f} | HEAD -c -1 > ${f}.out ; done
+cat *.out | base64 DECODE | paperkey --pubring ~/.gnupg/pubring.gpg | GPG --import
 \end{verbatim}
 
 \end{document}

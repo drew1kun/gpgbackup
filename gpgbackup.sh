@@ -36,7 +36,7 @@ function usage {
 }
 
 function check_deps {
-    command -v gpg >/dev/null 2>&1 || { echo >&2 "gpg/gpg2 is not installed.  Aborting."; exit 1; }
+    command -v $1 >/dev/null 2>&1 || { echo >&2 "gpg/gpg2 is not installed.  Aborting."; exit 1; }
     command -v paperkey >/dev/null 2>&1 || { echo >&2 "paperkey is not installed.  Aborting."; exit 1; }
     command -v qrencode >/dev/null 2>&1 || { echo >&2 "qrencode is not installed.  Aborting."; exit 1; }
     command -v zbarimg >/dev/null 2>&1 || { echo >&2 "zbarimg (zbar) is not installed.  Aborting."; exit 1; }
@@ -45,14 +45,14 @@ function check_deps {
 
 function key2qr {
     mkdir -p ./$1
-    gpg2 --export-secret-key $1 | paperkey --output-type raw | base64 > $1.ascii
+    $4 --export-secret-key $1 | paperkey --output-type raw | base64 > $1.ascii
     $2 -n 4 -d $1.ascii qr_
     for f in qr_*; do cat ${f} | qrencode -o $1_${f}.png; done
     tar -cvzf $1.qr.tar.gz ./*qr_*.png
     mv $1.qr.tar.gz ./$1
 
     # Cleanup
-    rm -fP $1.ascii *qr_*
+    $3 $1.ascii *qr_*
     exit 0
 }
 
@@ -63,25 +63,26 @@ function genpdf {
     cat ./latex/gpgbackup.tex.template | sed -e "s/PRIVATE_KEY/$1/g" \
     -e "s/HEAD/$2/g" \
     -e "s/DECODE/$3/g" \
-    -e "s/SPLIT/$4/g" > gpgbackup.tex
+    -e "s/SPLIT/$4/g" \
+    -e "s/GPG/$6/g" > gpgbackup.tex
 
     # generate pdf and move it right place:
     pdflatex --shell-escape gpgbackup.tex > /dev/null 2>&1
     mv gpgbackup.pdf ./$1
 
     # Cleanup:
-    rm -fP gpgbackup.log gpgbackup.tex gpgbackup.aux
+    $5 gpgbackup.log gpgbackup.tex gpgbackup.aux
     exit 0
 }
 
 function qr2key {
     cd ./$1
-    for f in *.png; do zbarimg --raw $f | $2 -c -1 > $f.out.ascii ; done
+    for f in *.png; do zbarimg --raw ${f} | $2 -c -1 > ${f}.out.ascii ; done
     cat *.out.ascii | base64 $3 | paperkey --pubring ~/.gnupg/pubring.gpg > "$1.asc"
-    #cat *.out.ascii | base64 $3 | paperkey --pubring ~/.gnupg/pubring.gpg | gpg2 --import
+    #cat *.out.ascii | base64 $3 | paperkey --pubring ~/.gnupg/pubring.gpg | $5 --import
 
     # Cleanup
-    rm -fP *.out.ascii
+    $4 *.out.ascii
     exit 0
 }
 
@@ -98,17 +99,21 @@ case ${OS} in
         HEAD='ghead'
         DECODE='-D'
         SPLIT='gsplit'
+        SECRM='rm -fP'
+        GPG='gpg2'
         ;;
     'linux')
         HEAD='head'
         DECODE='-d'
         SPLIT='split'
+        SECRM='shred -v -n 0 -z -u'
+        GPG='gpg'
         ;;
     *)
         echo "Unknown OS, Only MacOS and Linux supported for now"
 esac
 
-check_deps
+check_deps "${GPG}"
 
 # All of these commands are mutually exclusive, so we test for a single param here:
 if [[ $# -lt 1 ]]; then
@@ -123,13 +128,13 @@ fi
 while getopts ':hk:p:q:' opt; do
     case ${opt} in
         k)
-            key2qr "${PRIVATE_KEY}" "${SPLIT}"
+            key2qr "${PRIVATE_KEY}" "${SPLIT}" "${SECRM}" "${GPG}"
             ;;
         q)
-            qr2key "${PRIVATE_KEY}" "${HEAD}" "${DECODE}"
+            qr2key "${PRIVATE_KEY}" "${HEAD}" "${DECODE}" "${SECRM}" "${GPG}"
             ;;
         p)
-            genpdf "${PRIVATE_KEY}" "${HEAD}" "${DECODE}" "${SPLIT}"
+            genpdf "${PRIVATE_KEY}" "${HEAD}" "${DECODE}" "${SPLIT}" "${SECRM}" "${GPG}"
             ;;
         h)
             usage
