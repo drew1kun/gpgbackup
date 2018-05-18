@@ -3,18 +3,6 @@
 \usepackage{float}
 \usepackage{graphicx}
 \usepackage{pgffor}
-
-\def\gpgkey{PRIVATE_KEY}
-
-\newcommand\gpgtopng{
-  \immediate\write18{GPG --export-secret-key \gpgkey | paperkey --output-type raw | base64 > \gpgkey.ascii}
-  \immediate\write18{SPLIT -n 4 -d \gpgkey.ascii qr_}
-  \immediate\write18{for f in qr_*; do cat $f | qrencode -o /tmp/${f}.png; done}
-  \immediate\write18{rm -fP qr_* \gpgkey.ascii}
-}
-
-\gpgtopng
-
 \usepackage{fancyhdr}
 
 \pagestyle{fancy}
@@ -22,7 +10,21 @@
 \fancyhead[LE,RO]{Generated with \LaTeX}
 \fancyhead[RE,LO]{PRIVATE_KEY.asc}
 \fancyfoot[CE,CO]{\leftmark}
-\fancyfoot[LE,RO]{\thepage}
+\fancyfoot[C]{\thepage \ of 2}
+
+\renewcommand{\headrulewidth}{1pt}
+\renewcommand{\footrulewidth}{1pt}
+
+\def\gpgkey{PRIVATE_KEY}
+
+\newcommand\gpgtopng{
+  \immediate\write18{GPG --export-secret-key \gpgkey | paperkey --output-type raw | base64 > \gpgkey.ascii}
+  \immediate\write18{SPLIT -n 4 -d \gpgkey.ascii qr_}
+  \immediate\write18{for f in qr_*; do cat $f | qrencode -o /tmp/${f}.png; done}
+  \immediate\write18{SECRM qr_* \gpgkey.ascii}
+}
+
+\gpgtopng
 
 \begin{document}
 

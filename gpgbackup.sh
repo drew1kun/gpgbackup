@@ -5,19 +5,18 @@
 
 #========== Define functions ===========
 function usage {
+    echo "DESCRIPTION:"
     echo "Generate the QR Code from Secret Key and vice versa."
     echo ""
-    echo "The script will create a directory with <Key_ID> name,"
-    echo "containing a tarball with 4 PNG QR-Code files for specified secret key."
     echo ""
-    echo "Depends on:"
+    echo "DEPENDENCIES:"
     echo "  - gpg/gpg2"
     echo "  - paperkey"
     echo "  - qrencode"
     echo "  - coreutils (GNU version)"
     echo "  - pdflatex (mactex on MacOS or latex on Linux)"
     echo ""
-    echo "MacOS: install dependencies with Homebrew:"
+    echo "On MacOS install dependencies with Homebrew:"
     echo ""
     echo "      'brew cask install gpg-suite mactex'"
     echo "Install GPGTools GUI with gpg/gpg CLI as well as mactex(pdflatex)"
@@ -25,14 +24,30 @@ function usage {
     echo "      'brew install coreutils qrencode paperkey ghostscript'"
     echo "coreutils will be installed with g (for GNU) - prefix:  gsplit, ghead etc"
     echo ""
-    echo "Usage: "
-    echo "      'gpg2qr.sh { -h | {-k | -q <Key_ID>} }'"
     echo ""
-    echo "      -h, ?, --help - This message"
-    echo "      -k, --key2qr - Convert existing secret key to QR-Codes(PNG). Assumes secret key exists in gpg ring"
-    echo "      -q, --qr2key - Convert QR-Coedes to secret key. NOTE: Public key must exist on gpg pubring"
-    echo "      <Key_ID> - an email identity or the gpg key ID"
+    echo "USAGE:"
+    echo "      'gpg2qr.sh { -h | {-k | -p | -q <Key_ID>} }'"
     echo ""
+    echo "      -h - Show this message."
+    echo "      -k - Convert existing secret key to QR-Codes(PNG). Assumes secret key exists in gpg ring."
+    echo "      -p - Generate printable pdf with QR-Codes for offline paper backup."
+    echo "      -q - Convert QR-Coedes to secret key. NOTE: Public key must exist on gpg pubring."
+    echo "      <Key_ID> - an email identity or the gpg key ID. Required by -k -p and -q."
+    echo ""
+    echo ""
+    echo "EXAMPLES:"
+    echo ""
+    echo " ./gpgbackup.sh -k user@email.com  # Creates a folder with name 'user@email.com' containing tarball with 4 PNGs"
+    echo "                                   # with QR-Codes for storing key backups in digital form."
+    echo ""
+    echo " ./gpgbackup.sh -p user@email.com  # Creates a folder with name 'user@email.com' containing printable PDF"
+    echo "                                   # with QR-Codes for storing key backups on paper"
+    echo ""
+    echo " ./gpgbackup.sh -q user@email.com  # Recovers the secret key with 'user@email.com' ID. There must be folder"
+    echo "                                   # with the same name, containing the PNGs named in order."
+    echo "                                   # ORDER MATTERS! e.g.: 1.png, 2.png, 3.png, 4.png"
+    echo ""
+
 }
 
 function check_deps {
@@ -51,7 +66,7 @@ function key2qr {
     tar -cvzf $1.qr.tar.gz ./*qr_*.png
     mv $1.qr.tar.gz ./$1
 
-    # Cleanup
+    # Cleanup:
     $3 $1.ascii *qr_*
     exit 0
 }
@@ -60,18 +75,19 @@ function genpdf {
     mkdir -p ./$1
 
     # prepare gpgbackup.tex self generated latex document:
-    cat ./latex/gpgbackup.tex.template | sed -e "s/PRIVATE_KEY/$1/g" \
+    cat ./latex/gpgbackup.template.tex | sed -e "s/PRIVATE_KEY/$1/g" \
     -e "s/HEAD/$2/g" \
     -e "s/DECODE/$3/g" \
     -e "s/SPLIT/$4/g" \
-    -e "s/GPG/$6/g" > gpgbackup.tex
+    -e "s/SECRM/$5/g" \
+    -e "s/GPG/$6/g" > $1.tex
 
     # generate pdf and move it right place:
-    pdflatex --shell-escape gpgbackup.tex > /dev/null 2>&1
-    mv gpgbackup.pdf ./$1
+    pdflatex --shell-escape $1.tex > /dev/null 2>&1
+    mv $1.pdf ./$1
 
     # Cleanup:
-    $5 gpgbackup.log gpgbackup.tex gpgbackup.aux
+    $5 $1.log $1.tex $1.aux
     exit 0
 }
 
@@ -81,7 +97,7 @@ function qr2key {
     cat *.out.ascii | base64 $3 | paperkey --pubring ~/.gnupg/pubring.gpg > "$1.asc"
     #cat *.out.ascii | base64 $3 | paperkey --pubring ~/.gnupg/pubring.gpg | $5 --import
 
-    # Cleanup
+    # Cleanup:
     $4 *.out.ascii
     exit 0
 }
