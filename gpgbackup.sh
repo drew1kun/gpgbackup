@@ -26,7 +26,7 @@ function usage {
     echo ""
     echo ""
     echo "USAGE:"
-    echo "      'gpg2qr.sh { -h | {-k | -p | -q <Key_ID>} }'"
+    echo "      'gpgbackup.sh { -h | {-k | -p | -q <Key_ID>} }'"
     echo ""
     echo "      -h - Show this message."
     echo "      -k - Convert existing secret key to QR-Codes(PNG). Assumes secret key exists in gpg ring."
