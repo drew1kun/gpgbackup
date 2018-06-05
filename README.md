@@ -25,6 +25,7 @@ Depends on:
   - **gpg/gpg2**
   - **paperkey**
   - **qrencode**
+  - **zbar**
   - **coreutils** *(GNU version)*
   - **pdflatex** (mactex on MacOS or latex on Linux)
 
@@ -33,7 +34,7 @@ MacOS: install dependencies with [Homebrew][homebrew]:
       brew cask install gpg-suite mactex
 Install GPGTools GUI with gpg/gpg CLI as well as mactex(pdflatex)
 
-      brew install coreutils qrencode paperkey ghostscript
+      brew install coreutils qrencode zbar paperkey ghostscript
 coreutils will be installed with g (for GNU) - prefix:  gsplit, ghead etc
 
 ## Usage
