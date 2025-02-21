@@ -1,4 +1,4 @@
-#!/usr/bin/env bash -x
+#!/usr/bin/env bash
 
 function pdf() {
     if [[ $# -ne 6 ]]; then
@@ -44,10 +44,11 @@ function pdf() {
     done
 
     # CLEANUP:
-    find . -type f -name "${KEYID}.*" ! -name "${KEYID}.pdf" -exec ${SECRM} {} +  > /dev/null 2>&1
-    echo "Cleanup complete."
-
+    find . -type f -name "${KEYID}.*" ! -name "${KEYID}.pdf" -exec $SECRM {} +  > /dev/null 2>&1
     popd > /dev/null || exit 1  # Moving back after pushd
-    echo "PDF was generated, check ${KEYID}.qr.pdf directory"
+    echo
+    echo "PDF was generated!"
+    echo
+    echo "Check ${KEYID}.qr.pdf directory"
     exit 0
 }
