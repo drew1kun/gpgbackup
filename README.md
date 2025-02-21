@@ -1,4 +1,4 @@
-# gpgbackup
+# gpgpaper
 Back up your gpg private keys to printable QR codes, and restore them from scanned PNG images.
 
 [![BSD licensed][bsd-badge]][bsd-link]
@@ -8,7 +8,7 @@ Back up your gpg private keys to printable QR codes, and restore them from scann
 The script will create a directory with your gpg `<Key_ID>` name and put all the files there.
 `<Key_ID>` - gpg key identity: may be an email or key fingerprint like: `5F8C67D3`
 
-For recovering of the key the `gpgbackup.sh` script searches for a directory named `<Key_ID>`, containig PNG files with
+For recovering of the key the `gpgpaper.sh` script searches for a directory named `<Key_ID>`, containig PNG files with
 QR-Codes. It's just that simple.
 
 **IMPORTANT:**
@@ -44,12 +44,12 @@ coreutils will be installed with g (for GNU) - prefix:  gsplit, ghead etc
 Option 1: Generate a tarball with 4 PNG files containing QR-Codes of specified. You can then store it on digital
 storages
 
-    ./gpgbackup.sh -k user@email.com
+    ./gpgpaper.sh -k user@email.com
 
 
 Option 2: Generate a printable PDF file to store your keys on paper in safe onffine storage.
 
-    ./gpgbackup.sh -p 5F8C67D3
+    ./gpgpaper.sh -p 5F8C67D3
 
 
 ### RECOVER SECRET KEYS
@@ -59,9 +59,9 @@ If you stored keys on paper, then do the following:
  - scan the QR-codes,
  - save each QR-code in separate PNG file and name them accordingly:
     **1.png, 2.png, 2.png, 4.png** (Remember: **Order matters!**)
- - put all PNGs to folder named `<Key_ID>`
+ - put all PNGs to folder named `<Key_ID>.qr`
  - Clone this repo and put the folder to the repo next to script.
- - run: `./gpgbackup.sh -q <Key_ID>`
+ - run: `./gpgpaper.sh -r <Key_ID>`
 
 The gpg secret key file named `<Key_ID>.asc` will be generated in the `<Key_ID>` directory.
 

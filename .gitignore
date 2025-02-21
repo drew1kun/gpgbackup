@@ -5,6 +5,8 @@
 !.gitignore
 !latex
 !latex/gpgbackup.template.tex
+!src
+!src/*
 !gpgbackup.sh
 !README.md
 !LICENSE
