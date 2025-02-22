@@ -31,11 +31,16 @@ Depends on:
 
 MacOS: install dependencies with [Homebrew][homebrew]:
 
-      brew cask install gpg-suite mactex
-Install GPGTools GUI with gpg/gpg CLI as well as mactex(pdflatex)
-
-      brew install coreutils qrencode zbar paperkey ghostscript
-coreutils will be installed with g (for GNU) - prefix:  gsplit, ghead etc
+```
+brew install \
+	gpg-suite \
+	mactex-no-gui \
+	coreutils \
+	qrencode \
+	zbar \
+	paperkey
+```
+coreutils will be installed with `g` - prefix (stands for GNU). E.g.:  gsplit, ghead etc...
 
 ## Usage
 
@@ -67,7 +72,7 @@ The gpg secret key file named `<Key_ID>.asc` will be generated in the `<Key_ID>`
 
 Now you can import it using:
 
-    gpg2 --import ./<Key_ID>/<Key_ID>.asc
+    gpg --import ./<Key_ID>/<Key_ID>.asc
 
 Done!
 
@@ -80,5 +85,5 @@ Done!
 Andrew Shagayev | [e-mail](mailto:drewshg@gmail.com)
 
 [bsd-badge]: https://img.shields.io/badge/license-BSD-blue.svg
-[bsd-link]: https://raw.githubusercontent.com/drew-kun/gpgbackup/master/LICENSE
+[bsd-link]: https://raw.githubusercontent.com/drew1kun/gpgpaper/refs/heads/main/LICENSE
 [homebrew]: http://brew.sh/

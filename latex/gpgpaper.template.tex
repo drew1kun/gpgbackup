@@ -1,0 +1,56 @@
+% For Testing run:
+%   pdflatex --shell-escape gpg.rendered-template.tex
+\documentclass{article}
+
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{pgffor}
+\usepackage{fancyhdr}
+\usepackage{caption}
+\usepackage{lastpage}
+\captionsetup{labelformat=empty}
+
+\def\gpgkey{KEYID}
+\def\gpgcmd{GPG }
+\def\splitcmd{SPLIT }
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\LaTeX}
+\fancyhead[L]{\gpgkey}
+\fancyfoot[C]{\thepage~of~\pageref{LastPage}}
+
+\renewcommand{\headrulewidth}{1pt}
+\renewcommand{\footrulewidth}{1pt}
+
+\newcommand\gpgtopng{
+  \immediate\write18{\gpgcmd --export-secret-key \gpgkey | paperkey --output-type raw | base64 > \gpgkey.asc}
+  \immediate\write18{\splitcmd -n 4 --numeric-suffixes=1 -d \gpgkey.asc \gpgkey.part-}
+  \immediate\write18{for f in \gpgkey.part-*; do cat ${f} | qrencode -o /tmp/${f}.png; done}
+}
+
+\gpgtopng
+
+\begin{document}
+
+\begin{figure}[H]
+  \centering
+  \foreach \l in {1, 2, 3, 4} {
+    \begin{minipage}{0.45\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{/tmp/qr_0\l.png}
+      \caption{QR \l} % Caption will show QR 1, 2, 3, 4
+    \end{minipage}
+    \ifodd\l
+      \hspace{0.05\textwidth} % Space between two QR codes in the same row
+    \else
+      \par % Line break after the second QR code in each row
+    \fi
+  }
+\end{figure}
+
+\begin{center}
+  \textbf{Passpharase}\@: SECRET
+\end{center}
+
+\end{document}

@@ -1,12 +1,18 @@
 # Ignore EVERYTHING
 *
 
-# EXCEPT:
+# Allow ONLY:
 !.gitignore
-!latex
-!latex/gpgbackup.template.tex
-!src
-!src/*
-!gpgbackup.sh
 !README.md
 !LICENSE
+
+# Allow shell scripts (whatever they are named):
+!*.sh
+
+# Also allow latex directory and its it's template file:
+!latex
+!latex/gpgpaper.template.tex
+
+# Allow src directory and it's shell scripts:
+!src
+!src/*.sh
