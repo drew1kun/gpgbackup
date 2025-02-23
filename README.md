@@ -3,6 +3,10 @@ Back up your gpg private keys to printable QR codes, and restore them from scann
 
 [![BSD licensed][bsd-badge]][bsd-link]
 
+## Why?
+- [Why you still need paper hard copy backups?
+][why-paper-backup]
+
 ## What does it do?
 
 The script will create a directory with your gpg `<Key_ID>` name and put all the files there.
@@ -40,7 +44,7 @@ brew install \
 	zbar \
 	paperkey
 ```
-coreutils will be installed with `g` - prefix (stands for GNU). E.g.:  gsplit, ghead etc...
+Coreutils will be installed with `g` - prefix (stands for GNU). E.g.:  gsplit, ghead etc...
 
 ## Usage
 
@@ -87,3 +91,4 @@ Andrew Shagayev | [e-mail](mailto:drewshg@gmail.com)
 [bsd-badge]: https://img.shields.io/badge/license-BSD-blue.svg
 [bsd-link]: https://raw.githubusercontent.com/drew1kun/gpgpaper/refs/heads/main/LICENSE
 [homebrew]: http://brew.sh/
+[why-paper-backup]: https://www.norpacpaper.com/blog/why-you-still-need-paper-hard-copy-backups

@@ -14,7 +14,7 @@ function usage() {
     echo "On MacOS install dependencies with Homebrew:"
     echo "      'brew install gpg-suite mactex-no-gui coreutils qrencode paperkey'"
     echo
-    echo "coreutils will be installed with g (for GNU) - prefix:  gsplit, ghead etc"
+    echo "Coreutils will be installed with g (for GNU) - prefix:  gsplit, ghead etc"
     echo
     echo "USAGE:"
     echo "      'gpgbackup.sh { -h | {-b | -p | -r <Key_ID>} }'"
@@ -26,7 +26,6 @@ function usage() {
     echo "      <Key_ID> - an email identity or the gpg key ID. Required by -b -p and -r."
     echo
     echo "EXAMPLES:"
-    echo
     echo " ./gpgbackup.sh -b user@email.com  # Creates a folder with name 'user@email.com' containing tarball with 4 PNGs"
     echo "                                   # with QR-Codes for storing key backups in digital form."
     echo
@@ -36,5 +35,4 @@ function usage() {
     echo " ./gpgbackup.sh -r user@email.com  # Recovers the secret key with 'user@email.com' ID. There must be folder"
     echo "                                   # with the same name, containing the PNGs named in order."
     echo "                                   # ORDER MATTERS! e.g.: 1.png, 2.png, 3.png, 4.png"
-    echo
 }

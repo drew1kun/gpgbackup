@@ -8,6 +8,7 @@
 \usepackage{fancyhdr}
 \usepackage{caption}
 \usepackage{lastpage}
+\usepackage{datetime2}
 \captionsetup{labelformat=empty}
 
 \def\gpgkey{KEYID}
@@ -50,7 +51,10 @@
 \end{figure}
 
 \begin{center}
-  \textbf{Passpharase}\@: SECRET
+  \textbf{Passpharase:} SECRET
+
+  \vspace{5pt}
+  \textbf{Generated on:} \today~at~\DTMcurrenttime % Inserts the current date and time
 \end{center}
 
 \end{document}
