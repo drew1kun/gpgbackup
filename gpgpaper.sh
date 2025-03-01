@@ -8,7 +8,7 @@ for file in ./src/*.sh; do
 done
 
 KEYID=$2
-SECRM='shred -vuzn 4'
+SECRM='shred -uzn 4'
 GPG='gpg'
 
 # Detect OS
